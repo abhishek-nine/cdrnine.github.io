@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <style>
+        /* Import some festive fonts from Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap');
+
+        body {
+            background: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            color: #333;
+            overflow: hidden; /* Prevents scrollbars during animation */
+        }
+
+        #finalMessage {
+            background: white;
+            padding: 40px 60px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            opacity: 0; /* Initially hidden */
+            transform: scale(0.8);
+            z-index: 10; /* Ensure it's above the sunflowers */
+            position: relative;
+        }
+
+        #finalMessage.show {
+            animation: pop-in 1s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275) 1s; /* Pop in after 1s delay */
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #e74c3c; /* Solid red color */
+            /* Bounce animation for the heading */
+            animation: bounce 2.5s infinite 1.5s; /* Start bounce after it appears */
+        }
+
+        .sub-heading {
+            font-family: 'Pacifico', cursive;
+            font-size: 2rem;
+            color: #2980b9;
+            margin-top: -15px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .name {
+            font-weight: 600;
+            color: #2980b9;
+        }
+
+        /* New styles for the initial animation scene */
+        #initialScene {
+            position: relative;
+            animation: slide-in 1.5s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform: translateX(-100vw); /* Start off-screen */
+        }
+
+        .character {
+            width: 200px;
+            height: auto;
+        }
+
+        #openLetterBtn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            background-color: #e74c3c;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+            transition: transform 0.2s, background-color 0.2s;
+            opacity: 0; /* Initially hidden */
+            animation: fade-in 1s forwards 1.5s; /* Fade in after slide-in */
+        }
+
+        #openLetterBtn:hover {
+            transform: translateY(-3px);
+            background-color: #c0392b;
+        }
+
+        /* New styles for the poll */
+        #pollContainer {
+            margin-top: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        #pollContainer.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .poll-question {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .poll-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .poll-btn {
+            padding: 10px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: 2px solid #2980b9;
+            background-color: white;
+            color: #2980b9;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Style for the runaway button */
+        #noBtn {
+            transition: top 0.4s ease, left 0.4s ease; /* Smooth movement */
+            z-index: 9999; /* Ensure it's always on top when moving */
+        }
+
+        .poll-btn:hover {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        /* Utility class to hide elements */
+        .hidden {
+            display: none;
+        }
+
+        /* Sunflower rain styles */
+        #sunflower-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .falling-heart {
+            position: absolute;
+            top: -10%;
+            width: 40px;
+            height: 40px;
+            background-image: url('https://em-content.zobj.net/source/microsoft-teams/363/red-heart_2764-fe0f.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+
+        /* Fade out animation for the initial scene */
+        @keyframes fade-out {
+            to {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+        }
+
+        /* Keyframe for character sliding in */
+        @keyframes slide-in {
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        /* Keyframe animations */
+        @keyframes pop-in {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-25px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        @keyframes fade-in {
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sunflower container, now placed first to be in the background -->
+    <div id="sunflower-container"></div>
+
+    <!-- A wrapper for the main content to handle centering -->
+    <!-- Added position and z-index to ensure it's on top of the sunflowers -->
+    <div class="content-wrapper" style="position: relative; z-index: 5;">
+        <!-- Initial scene with character and button (will be animated by JS) -->
+        <div id="initialScene">
+            <div class="character-container">
+                <!-- A cute SVG character holding a letter -->
+                <svg class="character" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <g>
+                        <!-- Body -->
+                        <path d="M 50,180 C 20,150 20,80 50,50 C 80,20 120,20 150,50 C 180,80 180,150 150,180 Z" fill="#89cff0"/>
+                        <!-- Eyes -->
+                        <circle cx="85" cy="100" r="10" fill="white"/>
+                        <circle cx="115" cy="100" r="10" fill="white"/>
+                        <circle cx="88" cy="102" r="5" fill="black"/>
+                        <circle cx="118" cy="102" r="5" fill="black"/>
+                        <!-- Mouth -->
+                        <path d="M 90,130 Q 100,145 110,130" stroke="white" stroke-width="3" fill="none"/>
+                        <!-- Letter -->
+                        <rect x="110" y="120" width="70" height="50" fill="#fdfd96" stroke="#fada5e" stroke-width="2" rx="5"/>
+                        <path d="M 110,120 L 145,145 L 180,120" stroke="#fada5e" stroke-width="2" fill="none"/>
+                        <circle cx="145" cy="148" r="4" fill="#e74c3c"/>
+                    </g>
+                </svg>
+            </div>
+            <button id="openLetterBtn">Open the Letter</button>
+        </div>
+
+        <!-- The final message, initially hidden -->
+        <div class="hidden" id="finalMessage">
+            <h1>Happy Birthday ❤️</h1>
+            <h2 class="sub-heading">in advance</h2>
+            <p>Wishing you, <span class="name">NEHA ❤️</span>, a day filled with love, laughter, and all your favorite things. May your year ahead be as amazing as you are!</p>
+        </div>
+
+        <!-- Poll, initially hidden -->
+        <div id="pollContainer" class="hidden">
+            <p class="poll-question">gussa krna chorr dogi ?</p>
+            <div class="poll-options">
+                <button class="poll-btn" id="yesBtn">yes</button>                
+            </div>
+        </div>
+    </div>
+
+    <!-- The runaway button is placed outside the wrapper to ensure it's not affected by other styles -->
+    <button class="poll-btn hidden" id="noBtn">kabhi nhi</button>
+
+    <script>
+        const openLetterBtn = document.getElementById('openLetterBtn');
+        const initialScene = document.getElementById('initialScene');
+        const finalMessage = document.getElementById('finalMessage');
+        const sunflowerContainer = document.getElementById('sunflower-container');
+        const pollContainer = document.getElementById('pollContainer');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+
+        openLetterBtn.addEventListener('click', () => {
+            // 1. Fade out the initial scene
+            initialScene.style.animation = 'fade-out 0.5s forwards';
+
+            // 2. After fade out, hide it and show the final message container
+            setTimeout(() => {
+                initialScene.classList.add('hidden');
+                finalMessage.classList.remove('hidden');
+                finalMessage.classList.add('show');
+                pollContainer.classList.remove('hidden');
+
+                // 4. After another 3 seconds, show the poll
+                setTimeout(() => {
+                    pollContainer.classList.add('show');
+                    noBtn.classList.remove('hidden'); // Show the 'no' button along with the poll
+                }, 3000); // 3-second delay
+
+            }, 500); // Match the fade-out duration
+
+            // 3. Start the heart rain
+            startHeartRain();
+        });
+
+        // Function to move the 'kabhi nhi' button
+        function moveNoButton() {
+            // On the first move, set its position relative to the initial spot
+            if (noBtn.style.position !== 'fixed') {
+                const rect = noBtn.getBoundingClientRect();
+                noBtn.style.top = `${rect.top}px`;
+                noBtn.style.left = `${rect.left}px`;
+            }
+            // Make the button fixed on the first move to allow it to go anywhere
+            noBtn.style.position = 'fixed';
+
+            const btnRect = noBtn.getBoundingClientRect();
+
+            // Calculate a random position within the viewport bounds
+            const newTop = Math.random() * (window.innerHeight - btnRect.height);
+            const newLeft = Math.random() * (window.innerWidth - btnRect.width);
+
+            noBtn.style.top = newTop + 'px';
+            noBtn.style.left = newLeft + 'px';
+        }
+
+        // Move the button when it's hovered over
+        noBtn.addEventListener('mouseover', moveNoButton);
+
+        // When 'yes' is clicked, show a final message
+        yesBtn.addEventListener('click', () => {
+            pollContainer.innerHTML = `<p class="poll-question" style="font-size: 1.5rem;">Thank You! 😉❤️</p>`;
+        });
+
+
+        function startHeartRain() {
+            const numberOfHearts = 50; // Adjust for more/less hearts
+            for (let i = 0; i < numberOfHearts; i++) {
+                createHeart();
+            }
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('falling-heart');
+            heart.style.left = Math.random() * 100 + 'vw'; // Random horizontal start
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's'; // Random fall speed (4-7s)
+            heart.style.animationDelay = Math.random() * 5 + 's'; // Random start delay
+            sunflowerContainer.appendChild(heart);
+        }
+    </script>
+
+</body>
+</html>
